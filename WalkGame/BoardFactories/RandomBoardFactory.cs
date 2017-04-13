@@ -15,27 +15,27 @@ namespace WalkGame.BoardFactories
         public RandomBoardFactory(int size)
         {
             _size = size;
-            var map = new List<TileTypes>();
+            _map = new List<TileTypes>();
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    map.Add(rng.Next(100) % 5 == 0 ?
+                    _map.Add(rng.Next(100) % 5 == 0 ?
                         TileTypes.Wall :
                         TileTypes.Empty);
                 }
             }
-            _map = Shuffle(map);// .Select(x => x.Value).ToList();
-            map[0] = TileTypes.Start;
-            map[map.Count - 1] = TileTypes.End;
+            Shuffle(_map);
+            _map[0] = TileTypes.Start;
+            _map[_map.Count - 1] = TileTypes.End;
         }
 
         public TileTypes GetTileForPosition(int x, int y)
         {
-            return _map[_size * y + x];
+            return _map[x + y * _size];
         }
 
-        private IList<T> Shuffle<T>(IList<T> list)
+        private void Shuffle<T>(IList<T> list)
         {
             int n = list.Count;
             while (n > 1)
@@ -46,7 +46,6 @@ namespace WalkGame.BoardFactories
                 list[k] = list[n];
                 list[n] = value;
             }
-            return list;
         }
     }
 }

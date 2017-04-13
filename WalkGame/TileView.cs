@@ -18,10 +18,10 @@ namespace WalkGame
         {
             switch(_tile.Type)
             {
-                case Core.TileTypes.Empty: return "0";
-                case Core.TileTypes.Start: return "s";
-                case Core.TileTypes.End: return "X";
-                case Core.TileTypes.Wall: return "|";
+                case Core.TileTypes.Empty:  return "0";
+                case Core.TileTypes.Start:  return "s";
+                case Core.TileTypes.End:    return "X";
+                case Core.TileTypes.Wall:   return "|";
             }
             return "#";
         }
