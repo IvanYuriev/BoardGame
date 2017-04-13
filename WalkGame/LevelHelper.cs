@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Core;
 
 namespace WalkGame
@@ -12,11 +9,17 @@ namespace WalkGame
         {
             switch(level)
             {
-                case Levels.Level0: return 5;
-                case Levels.Level1: return 5;
-                case Levels.Level2: return 10;
+                case Levels.Level0:
+                case Levels.Level1:
+                case Levels.Level3:
+                    return 5;
+
+                case Levels.Level2:
+                    return 10;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
-            return 0;
         }
     }
 }

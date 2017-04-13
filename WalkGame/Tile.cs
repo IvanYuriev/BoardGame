@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Core;
+﻿using Core;
 
 namespace WalkGame
 {
@@ -15,7 +11,7 @@ namespace WalkGame
 
         public Tile(TileTypes type)
         {
-            this.Type = type;
+            Type = type;
         }
 
         public TileTypes Type { get; private set; }

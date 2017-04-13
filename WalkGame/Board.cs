@@ -1,31 +1,30 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Core;
 
 namespace WalkGame
 {
     public class Board
     {
-        private Tile[,] _board;
+        private readonly Tile[,] _board;
         
         public Board(int size)
         {
             Size = size;
             _board = new Tile[size, size];
-            for (int i = 0; i < Size; i++)
-                for (int j = 0; j < Size; j++)
+            for (var i = 0; i < Size; i++)
+                for (var j = 0; j < Size; j++)
                     _board[i, j] = Tile.EmptyTile;
         }
 
-        public int Size { get; private set; }
+        public int Size { get; }
 
         public Tile GetTileAt(int x, int y)
         {
-            if (x > Size || x < 0) throw new ArgumentOutOfRangeException("x");
-            if (y > Size || y < 0) throw new ArgumentOutOfRangeException("y");
+            if (x > Size || x < 0)
+                throw new ArgumentOutOfRangeException(nameof(x));
+
+            if (y > Size || y < 0)
+                throw new ArgumentOutOfRangeException(nameof(y));
 
             return _board[x, y];
         }
@@ -37,8 +36,8 @@ namespace WalkGame
 
         public void Construct(IBoardFactory factory)
         {
-            for (int x = 0; x < Size; x++)
-                for (int y = 0; y < Size; y++)
+            for (var x = 0; x < Size; x++)
+                for (var y = 0; y < Size; y++)
                     _board[x, y] = new Tile(factory.GetTileForPosition(x, y));
         }
     }

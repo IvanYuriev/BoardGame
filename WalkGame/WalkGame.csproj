@@ -40,7 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board.cs" />
+    <Compile Include="BoardFactories\BaseBoard.cs" />
     <Compile Include="BoardFactories\Creator.cs" />
+    <Compile Include="BoardFactories\CustomBoardFactory.cs" />
     <Compile Include="BoardFactories\DefaultBoardFactory.cs" />
     <Compile Include="BoardFactories\RandomBoardFactory.cs" />
     <Compile Include="Game.cs" />
