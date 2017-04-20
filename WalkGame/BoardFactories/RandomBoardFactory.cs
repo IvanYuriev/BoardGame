@@ -1,43 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Core;
 
 namespace WalkGame.BoardFactories
 {
-    class RandomBoardFactory : BaseBoard
+    class RandomBoardFactory : IBoardFactory
     {
-        private static readonly Random rng = new Random();
+        private IList<TileTypes> _map;
+        private int _size;
+        private static Random rng = new Random();
 
         public RandomBoardFactory(int size)
         {
-            Size = size;
-            var map = new List<TileTypes>();
-            for (var i = 0; i < size; i++)
+            _size = size;
+            _map = new List<TileTypes>();
+            for (int i = 0; i < size; i++)
             {
-                for (var j = 0; j < size; j++)
+                for (int j = 0; j < size; j++)
                 {
-                    map.Add(rng.Next(100) % 5 == 0 ?
+                    _map.Add(rng.Next(100) % 5 == 0 ?
                         TileTypes.Wall :
                         TileTypes.Empty);
                 }
             }
-
-            Map = Shuffle(map);
-            SetPointers();
+            Shuffle(_map);
+            _map[0] = TileTypes.Start;
+            _map[_map.Count - 1] = TileTypes.End;
         }
 
-        private static IList<T> Shuffle<T>(IList<T> list)
+        public TileTypes GetTileForPosition(int x, int y)
         {
-            var n = list.Count;
+            return _map[x + y * _size];
+        }
+
+        private void Shuffle<T>(IList<T> list)
+        {
+            int n = list.Count;
             while (n > 1)
             {
                 n--;
-                var k = rng.Next(n + 1);
-                var value = list[k];
+                int k = rng.Next(n + 1);
+                T value = list[k];
                 list[k] = list[n];
                 list[n] = value;
             }
-            return list;
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using WalkGame;
 using Core;
+using System.Threading;
 
 namespace BoardGame
 {
@@ -11,38 +14,48 @@ namespace BoardGame
         {
             Console.WriteLine("Hello and welcome to the BoardGamer!");
 
-            var quit = false;
-            do
+
+            ManualResetEvent ePing = new ManualResetEvent(true);
+            ManualResetEvent ePong = new ManualResetEvent(false);
+            int count = 30;
+            ThreadPool.QueueUserWorkItem((o) =>
             {
-                try
+                int i = 0;
+                while (i++ < count)
                 {
-                    var listLevels = string.Empty;
-                    listLevels = Enum.GetValues(typeof (Levels)).Cast<Levels>().Aggregate(listLevels, (current, val) => current + $"{(int)val} ").TrimEnd();
-
-                    Console.WriteLine($"Enter level ({listLevels})");
-                    int level = int.TryParse(Console.ReadLine(), out level) ? level : -1;
-
-                    var exist = Enum.IsDefined(typeof (Levels), level);
-                    if (!exist)
-                    {
-                        Console.WriteLine("There is no such level!");
-                        continue;
-                    }
-
-                    var game = new Game((Levels)level);
-                    Console.WriteLine(game.PrintBoard());
+                    ePing.WaitOne(); Console.WriteLine("Ping"); ePong.Set();
+                    Thread.Sleep(500);
                 }
-                catch (Exception ex)
+            });
+            ThreadPool.QueueUserWorkItem((o) =>
+            {
+                int i = 0;
+                while (i++ < count)
                 {
-                    Console.WriteLine("Error: " + ex.Message);
+                    ePong.WaitOne(); Console.WriteLine("Pong"); ePing.Set();
+                    Thread.Sleep(500);
                 }
+            });
 
-                Console.WriteLine("Quit(y/n)?");
-                var readLine = Console.ReadLine();
-                if (readLine != null)
-                    quit = readLine.ToLower() == "y";
-
-            } while (!quit);
+            Console.Read();
+            //var quit = false;
+            //do
+            //{
+            //    try
+            //    {
+            //        Console.WriteLine("Enter level (0 to 2)");
+            //        var level = Int32.Parse(Console.ReadLine());
+            //        //TODO: unsafe! need to more predictable way to convert int to Levels enum
+            //        var game = new Game((Levels)level);
+            //        Console.WriteLine(game.PrintBoard());
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine("Error: " + ex.Message);
+            //    }
+            //    Console.WriteLine("Quit?(y/n)");
+            //    quit = Console.ReadLine().ToLower() == "y";
+            //} while (!quit);
         }
     }
 }
